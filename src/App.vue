@@ -3,7 +3,7 @@
     <Header
       :current-role="currentRole"
       :is-sidebar-visible="isSidebarVisible"
-      @update-role="handleRoleUpdate"
+      @update-role="updateRole"
       @toggle-sidebar="toggleSidebar"
     />
     <div class="app-content">
