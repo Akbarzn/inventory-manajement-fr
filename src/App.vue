@@ -1,20 +1,24 @@
 <template>
   <div id="app">
-    <Header 
+    <Header
       :current-role="currentRole"
       :is-sidebar-visible="isSidebarVisible"
       @update-role="handleRoleUpdate"
       @toggle-sidebar="toggleSidebar"
     />
-    
-    <Sidebar 
-      :current-role="currentRole"
-      :is-sidebar-visible="isSidebarVisible"
-      @show-component="handleComponentChange"
-    />
+    <div class="app-content">
+      <Sidebar
+        :current-role="currentRole"
+        :is-sidebar-visible="isSidebarVisible"
+        @show-component="navigateTo"
+      />
 
-    <main :class="{ 'content-expanded': !isSidebarVisible }">
-      <AdminView 
+      <main
+        class="main-content"
+        :class="{ 'content-expanded': !isSidebarVisible }"
+      >
+      <router-view :key="$route.fullPath" :currentComponent="$route.params.component" />
+        <!-- <AdminView 
         v-if="currentRole === 'admin'"
         :current-component="currentComponent"
         :items="items"
@@ -30,141 +34,118 @@
         v-if="currentRole === 'user'"
         :current-component="currentComponent"
         :items="items"
-      />
-    </main>
+      /> -->
+      </main>
+    </div>
 
-    <Modal 
-      v-if="showModal"
-      :modal-content="modalContent"
-      @close="closeModal"
-    />
+    <Modal v-if="showModal" :modal-content="modalContent" @close="closeModal" />
   </div>
 </template>
 
 <script>
-import Header from '@/components/dashboard/Header.vue'
-import Sidebar from '@/components/dashboard/Sidebar.vue'
-import AdminView from '@/views/AdminView.vue'
-import UserView from '@/views/UserView.vue'
-import Modal from '@/components/Modal.vue'
+import Header from "./components/dashboard/Header.vue";
+import Sidebar from "./components/dashboard/Sidebar.vue";
+import AdminView from "./views/AdminView.vue";
+import UserView from "./views/UserView.vue";
+import { EventBus } from "./utils/EventBus";
 
 export default {
-  name: 'App',
   components: {
     Header,
     Sidebar,
-    AdminView,
-    UserView,
-    Modal
+    // AdminView,
+    // UserView,
+    
   },
   data() {
-    return {
-      currentRole: 'user', 
-      currentComponent: 'items',
-      isSidebarVisible: true, 
-      items: [
-        {
-          code: 'Hp001',
-          name: 'Hp Vivo',
-          description: 'Keluaran terbaru',
-          stock: 10
-        },
-        {
-          code: 'Hp002',
-          name: 'Hp Lenovo',
-          description: 'Keluaran Terbaru',
-          stock: 25
-        },
-        {
-          code: 'Hp003',
-          name: 'Hp Samsung',
-          description: 'Keluaran Terbaru',
-          stock: 30
-        }
-      ],
-      showItemForm: false,
-      selectedItem: null,
-      showModal: false,
-      modalContent: {
-        title: '',
-        message: '',
-        type: ''
-      }
+    return{
+      currentRole:this.$route.name || 'admin',
+      isSidebarVisible:true,
+      searchTerm:'',
+      // currentComponent: "items",
+    }
+    // const params = new URLSearchParams(window.location.search);
+    // return {
+    //   currentRole: params.get("role") || "admin",
+    //   currentComponent: params.get("component") || "items",
+    //   isSidebarVisible: params.get("sidebar") !== "hidden",
+    // };
+  },
+  watch:{
+    '$route.name'(newRole){
+      this.currentRole = newRole
     }
   },
+  computed: {
+    currentView() {
+      return this.currentRole === "admin" ? AdminView : UserView;
+    },
+  },
   methods: {
-    handleRoleUpdate(role) {
-      this.currentRole = role
-      this.currentComponent = role === 'admin' ? 'users' : 'items'
-      console.log('Role changed to:', role)
+    updateRole(role) {
+      this.currentRole = role;
+      this.navigateTo("items");
     },
-    
+    navigateTo(component) {
+      this.currentComponent = component;
+      this.$router.push({name:this.currentRole,params:{ component }})
+      // this.updateURLParams();
+    },
     toggleSidebar() {
-      this.isSidebarVisible = !this.isSidebarVisible
-      console.log('Sidebar toggled:', this.isSidebarVisible)
+      this.isSidebarVisible = !this.isSidebarVisible;
+      
+      // this.updateURLParams();
     },
-    
-    handleComponentChange(component) {
-      this.currentComponent = component
-      this.showItemForm = false
-      console.log('Component changed to:', component)
-    },
-
-    handleSaveItem(item) {
-      const index = this.items.findIndex(i => i.code === item.code)
-      if (index !== -1) {
-        // Update existing item
-        this.items.splice(index, 1, item)
-        this.showNotification('Sukses', 'Item berhasil diperbarui', 'success')
-      } else {
-        // Add new item
-        this.items.push(item)
-        this.showNotification('Sukses', 'Item berhasil ditambahkan', 'success')
+    // updateURLParams() {
+    //   const params = new URLSearchParams();
+    //   params.set("role", this.currentRole);
+    //   params.set("component", this.currentComponent);
+    //   params.set("sidebar", this.isSidebarVisible ? "visible" : "hidden");
+    //   window.history.replaceState(
+    //     {},
+    //     "",
+    //     `${window.location.pathname}?${params}`
+    //   );
+    // },
+    handleSearch(newQuery) {
+      console.log("Search term:", newQuery);
+      // Implement your search logic based on currentRole and newQuery
+      if (this.currentRole === "admin") {
+        // Example: Perform search in admin items
+        console.log("Search in admin items");
+      } else if (this.currentRole === "user") {
+        // Example: Perform search in user items
+        console.log("Search in user items");
       }
-      this.showItemForm = false
-      this.selectedItem = null
     },
-
-    handleEditItem(item) {
-      this.selectedItem = item
-      this.showItemForm = true
-    },
-
-    handleDeleteItem(code) {
-      this.items = this.items.filter(item => item.code !== code)
-      this.showNotification('Sukses', 'Item berhasil dihapus', 'success')
-    },
-
-    showNotification(title, message, type) {
-      this.modalContent = { title, message, type }
-      this.showModal = true
-    },
-
-    closeModal() {
-      this.showModal = false
-      this.modalContent = { title: '', message: '', type: '' }
-    }
-  }
-}
+  },
+  mounted() {
+    EventBus.on("search", this.handleSearch);
+  },
+  beforeUnmount() {
+    EventBus.off("search", this.handleSearch);
+  },
+};
 </script>
 
 <style scoped>
-#app {
+.app-content {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   display: flex;
+  font: 1em sans-serif;
+  height: 100vh;
+  margin-top: 60px;
 }
-
-main {
-  transition: margin-right 0.3s ease;
-  flex-grow: 1; 
-  padding: 4px; 
-  width: 100%;
+.main-content {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
 }
-
-.content-expanded {
-  margin-left: 0px; 
+.main-content.expanded {
+  margin-left: 200px;
 }
-
-.sidebar {
-  width: 243px; 
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
 }
 </style>
