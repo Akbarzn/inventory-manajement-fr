@@ -28,72 +28,103 @@ export default {
 
 <style scoped>
 .navbar {
-  background-color: aquamarine;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+
+background-color: #4b3f6b;
+
+color: white;
+
+padding: 10px 20px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+flex-wrap: wrap;
+
 }
 
-.navbar-start{
-    display: flex;
-    justify-content: space-between;
-    gap:8px;
-    flex-wrap: wrap;
-}
-.navbar-item{
-    transition: background-color 0.3s;
-    color:red;
-    text-decoration: none;
-    padding: 3px 8px;
-    border-radius: 4px;
-    cursor: pointer;
+.navbar-brand {
+
+display: flex;
+
+align-items: center;
+
 }
 
-.navbar-item:hover{
-    background-color: #333;
-    color: aquamarine;
+.navbar-item {
+
+color: white;
+
+padding: 10px 15px;
+
+cursor: pointer;
+
+transition: background-color 0.3s;
+
 }
 
-.navbar-menu{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.navbar-item:hover {
+
+background-color: rgba(255, 255, 255, 0.2);
+
+border-radius: 4px;
+
 }
 
-@media (max-width:768px){
-  .navbar{
-    display: flex;
-    flex-direction: column;
-  }
-    .navbar-menu{
-        display: none;
-        width: 100px;
-        flex-direction: column;
-        justify-content: center;
-      }
-      
-      .navbar-start{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-      }
-      
-      .navbar-item{
-      flex-direction: column;
-        width: 100%;
-        text-align: center;
-        padding: 15px 0;
-        border-bottom: 1px #ffffff;
-    }
-    
-    .navbar-item:last-child{
-        border-bottom: none;
-    }
+.navbar-menu {
+
+display: flex;
+
+align-items: center;
+
+flex-wrap: wrap;
+
+}
+
+@media (max-width: 768px) {
+
+.navbar-menu {
+
+width: 100%;
+
+justify-content: center;
+
+}
+
+.navbar-start {
+
+display: flex;
+
+flex-direction: column;
+
+width: 100%;
+
+align-items: center;
+
+}
+
+.navbar-item {
+
+width: 100%;
+
+text-align: center;
+
+padding: 15px 0;
+
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+.navbar-item:last-child {
+
+border-bottom: none;
+
+}
+
 }
 
 </style>

@@ -5,5 +5,6 @@ import  'bootstrap/dist/js/bootstrap.min.js'
 import router from './router'
 import { createPinia } from 'pinia'
 import './assets/style/global.css';
+import 'bootstrap-icons/font/bootstrap-icons.css'
 // import axios from 'axios'
-createApp(App).use(createPinia()).use(router).mount('#app')
+createApp(App).use(router).use(createPinia()).use(router).mount('#app')

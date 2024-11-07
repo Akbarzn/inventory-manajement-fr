@@ -33,7 +33,7 @@
         <input type="number" v-model="jumlah_pinjam" id="jumlah_pinjam" :disabled="true" />
         </dir>
 
-        <div class="btn-container">
+        <div class="button-container">
         <button type="button" @click="cancelForm">Batal</button>
         <button type="submit">Ajukan</button>
         </div>
@@ -47,31 +47,32 @@
         props:{
             items:{
                 type:Object,
-                default:() => ({})
-            },
-            isEdit:{
-                type:Boolean,
-                default:false
+                isEdit:Boolean
             }
         },
         data(){
             return{
-                kode:this.items ? this.items.kode : '',
-                nama:this.items ? this.items.name : '',
-                deskripsi:this.items ? this.items.deskripsi : '',
+              form:{
+                kode:this.item ? this.item.kode:"",
+                nama:this.item ? this.item.nama:"",
+                deskripsi:this.item ? this.item.deskripsi:"",
                 tanggal_pinjam: '',
                 tanggal_kembali: '',
                 jumlah_pinjam : 1
+              }
             }
         },
         methods:{
             submitForm(){
-                this.$emit('submit',{...this.form})
+              // emit custom event submit dgn payload data form
+              this.$emit('submit',{...this.form})
             },
             cancelForm(){
+              // emit custom event cancel tanpa payload
                 this.$emit('cancel')
             }
         },
+            // utk lakukan pemantauan perubahan data pada ItemList
         watch:{
             item(newItem){
                 if(newItem){
@@ -86,68 +87,55 @@
 </script>
 
 <style scoped>
-.button-container {
-  margin-top: 1rem;
-  display: flex;
-  gap: 1rem;
-}
-
-form {
+form{
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 400px;
+  margin: auto;
+  background-color: aquamarine;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
+h2{
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+label{
+  margin-top: 10px;
 }
 
-button[type="submit"] {
+input{
+  padding: 5px;
+  margin-top: 5px;
+}
+
+.button-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+button{
   background-color: #4caf50;
   color: white;
-}
-
-button[type="submit"]:hover {
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius:4px;
+&:hover{
   background-color: #45a049;
 }
-
-button[type="button"] {
-  background-color: #f44336;
-  color: white;
 }
 
-button[type="button"]:hover {
-  background-color: #da190b;
+button[type="button"]{
+  background-color: #f44336
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
+button[type="button"]:hover{
+  background-color: #e31b0c;
 }
 </style>

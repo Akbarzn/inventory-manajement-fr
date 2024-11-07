@@ -1,16 +1,17 @@
 <template>
-  <div class="item-list">
-    <div class="header">
+  <div class="item-list container p-4">
+    <div class="header d-flex justify-content-between align-items-center mb-3">
       <h2>Daftar Barang</h2>
-      <button class="add-btn" @click="showAddForm">Tambah Item</button>
+      <button class="btn btn-primary" @click="showAddForm">Tambah Item</button>
     </div>
-    <div class="item-cards">
+    <div class="item-cards row gap-3">
     <ItemCard 
     v-for="item in items"
     :key="item.kode"
     :item="item"
     @editItem="editItem"
     @delete-item="deleteItem" 
+    class="col-md-6 col-lg-3"
     />
     </div>
     <Modal :visible="showForm" @close="cancelEditForm">
@@ -88,111 +89,26 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.item-list {
-  max-width: 800px;
-  margin: 20px auto;
-  background-color: #f9f9f9;
+<style scoped>
+.item-list{
+  background-color: white;
   border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #007acc;
-    color: #ffffff;
-    padding: 15px;
-    font-weight: bold;
+.header h2{
+  color: #4b3f6b;
+  font-size: 24px;
+}
 
-    h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
+.btn-primary{
+  background-color: #4b3f6b;
+  color: white;
+  border: none;
 
-    .add-btn {
-      background-color: #60a4d2;
-      color: #ffffff;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #004080;
-      }
-    }
+  &:hover{
+    background-color: #2276cb;
   }
-
-  .table-responsive {
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-      background-color: #e0e0e0;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: left;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    th {
-      color: #333;
-      font-weight: bold;
-    }
-
-    td {
-      color: #666;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-
-      button {
-        padding: 5px 10px;
-        font-size: 0.85rem;
-        cursor: pointer;
-        border-radius: 4px;
-        border: none;
-        transition: background-color 0.3s;
-
-        &:nth-child(1) {
-          background-color: #007acc;
-          color: #fff;
-
-          &:hover {
-            background-color: #005b99;
-          }
-        }
-
-        &:nth-child(2) {
-          background-color: #cc0000;
-          color: #fff;
-
-          &:hover {
-            background-color: #990000;
-          }
-        }
-      }
-    }
-
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-  }
-
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="admin-view">
-    <div v-if="currentComponent === 'users'">
+    <!-- <div v-if="currentComponent === 'users'">
       <div class="component-container">
         <UserList
           @add-user="handleAddUser"
@@ -32,28 +32,43 @@
         <Transaction />
       </div>
     </div>
+   -->
+
+   <div class="scrollable-content">
+    <UserList v-if="currentComponent === 'users'" />
+   <ItemList v-if="currentComponent === 'items'" 
+   @edit-item="showEditForm"
+   @add-item="showAddForm"
+    />
+    <TransactionList v-if="currentComponent === 'transactions'" />
+   </div>
+   <Modal v-if="showForm" :isVisible="showForm" @close="cancelEditForm" :title="isEdit ? 'Edit' : 'Add'" >
+   <ItemForm :item="selectedItem" :isEdit="isEdit" @submit="handleSubmit" />
+   </Modal>
   </div>
 </template>
 
 <script>
 import ItemList from '@/components/admin/item/ItemListAdmin.vue'
 import ItemForm from '@/components/admin/item/ItemForm.vue'
-import Transaction from '@/components/admin/transaction/TransactionList.vue'
+import TransactionList from '@/components/admin/transaction/TransactionList.vue'
 import UserList from '@/components/admin/user/UserList.vue'  
+import Modal from '@/components/Modal.vue'
 
 export default {
   name: 'AdminView',
   components: {
     ItemList,
     ItemForm,
-    Transaction,
-    UserList  
+    TransactionList,
+    UserList  ,
+    Modal
   },
   data() {
     return {
-      showUserForm: false,
-      selectedUser: null,
-      selectedItem:null
+      showForm: false,
+      selectedItem:null,
+      isEdit:false
     }
   },
   props: {
@@ -61,69 +76,36 @@ export default {
       type: String,
       required: true
     },
-    items: {
-      type: Array,
-      required: true
-    },
-    showItemForm: {
-      type: Boolean,
-      required: true
-    },
-    
   },
   methods: {
-    handleAddUser() {
-      this.showUserForm = true
-      this.selectedUser = null
+    showEditForm(item) {
+      this.selectedItem = item
+      this.isEdit = true
+      this.showForm = true
     },
-    handleEditUser(user) {
-      this.showUserForm = true
-      this.selectedUser = user
+    showAddForm() {
+      this.selectedItem = null
+      this.isEdit = false
+      this.showForm = true
     },
-    handleDeleteUserSuccess(userId) {
-      console.log(`User dengan ID ${userId} berhasil dihapus`)
-    },
-    handleEditItem(item) {
-    this.selectedItem = item
-    this.$emit('update:show-item-form', true)
-  },
-  handleDeleteItem(itemId) {
-    console.log(`Item dengan ID ${itemId} berhasil dihapus`)
+    handleSubmit() {
+      this.selectedItem = null
+      this.isEdit = false
+      this.showForm = false
     
-  }
+    },
+    cancelEditForm() {
+      this.selectedItem = null
+      this.isEdit = false
+      this.showForm = false
   },
-  emits: [
-    'update:show-item-form',
-    'save-item',
-    'edit-item',
-    'delete-item'
-  ]
+}
 }
 </script>
 
 <style scoped>
-.admin-view {
-  width: 100%;
-  /* padding: 40px; */
-  /* margin: 0 auto; */
-  margin-top: 60px; 
-  min-height: calc(100vh - 60px);
-  background-color: #f5f5f5;
-  margin-left: 100px;
-}
-
-.component-container {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  padding: 6px; 
-  height: 100%;
-}
-
-@media (max-width: 576px) {
-  .admin-view {
-    margin-left: 0; 
-    padding: 15px;
-  }
+.scrollable-content{
+  /* width: calc(100% - 200px); */
+  margin-left: 200px;
 }
 </style>

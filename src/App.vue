@@ -18,23 +18,6 @@
         :class="{ 'content-expanded': !isSidebarVisible }"
       >
       <router-view :key="$route.fullPath" :currentComponent="$route.params.component" />
-        <!-- <AdminView 
-        v-if="currentRole === 'admin'"
-        :current-component="currentComponent"
-        :items="items"
-        :show-item-form="showItemForm"
-        :selected-item="selectedItem"
-        @update:show-item-form="showItemForm = $event"
-        @save-item="handleSaveItem"
-        @edit-item="handleEditItem"
-        @delete-item="handleDeleteItem"
-      />
-      
-      <UserView
-        v-if="currentRole === 'user'"
-        :current-component="currentComponent"
-        :items="items"
-      /> -->
       </main>
     </div>
 
@@ -62,14 +45,7 @@ export default {
       currentRole:this.$route.name || 'admin',
       isSidebarVisible:true,
       searchTerm:'',
-      // currentComponent: "items",
     }
-    // const params = new URLSearchParams(window.location.search);
-    // return {
-    //   currentRole: params.get("role") || "admin",
-    //   currentComponent: params.get("component") || "items",
-    //   isSidebarVisible: params.get("sidebar") !== "hidden",
-    // };
   },
   watch:{
     '$route.name'(newRole){
@@ -77,7 +53,7 @@ export default {
     }
   },
   computed: {
-    currentView() {
+    currentView(){
       return this.currentRole === "admin" ? AdminView : UserView;
     },
   },
@@ -87,34 +63,16 @@ export default {
       this.navigateTo("items");
     },
     navigateTo(component) {
-      this.currentComponent = component;
       this.$router.push({name:this.currentRole,params:{ component }})
-      // this.updateURLParams();
     },
     toggleSidebar() {
       this.isSidebarVisible = !this.isSidebarVisible;
-      
-      // this.updateURLParams();
     },
-    // updateURLParams() {
-    //   const params = new URLSearchParams();
-    //   params.set("role", this.currentRole);
-    //   params.set("component", this.currentComponent);
-    //   params.set("sidebar", this.isSidebarVisible ? "visible" : "hidden");
-    //   window.history.replaceState(
-    //     {},
-    //     "",
-    //     `${window.location.pathname}?${params}`
-    //   );
-    // },
     handleSearch(newQuery) {
       console.log("Search term:", newQuery);
-      // Implement your search logic based on currentRole and newQuery
       if (this.currentRole === "admin") {
-        // Example: Perform search in admin items
         console.log("Search in admin items");
       } else if (this.currentRole === "user") {
-        // Example: Perform search in user items
         console.log("Search in user items");
       }
     },

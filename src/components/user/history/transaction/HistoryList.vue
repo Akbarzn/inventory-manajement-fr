@@ -19,7 +19,7 @@
             <td>{{ history.namaBarang }}</td>
             <td>{{ history.jumlahPinjam }}</td>
             <td>{{ history.tanggalPinjam }}</td>
-            <td>{{ history.tanggalKembalian }}</td>
+            <td>{{ history.tanggalKembali }}</td>
             <td>
               <span :class="['status-badge', history.status.toLowerCase()]">{{
                 history.status
@@ -77,124 +77,67 @@ export default {
 
 <style scoped>
 .history-list {
-  padding: 1rem;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin: 0; 
+padding: 16px;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+margin: 8px 0;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem; 
-  padding: 0 0.5rem;  
-}
-
-.header h2 {
-  color: #1f2937;
-  font-size: 1.25rem; 
-  font-weight: 600;
-  margin: 0;
-}
-
-.table-responsive {
-  overflow-x: auto;
-  background: linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
-    linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 100% 0,
-    radial-gradient(
-      farthest-side at 0 50%,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0)
-    ),
-    radial-gradient(
-      farthest-side at 100% 50%,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0)
-    )
-    100% 0;
-  background-repeat: no-repeat;
-  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
-  background-position: 0 0, 100% 0, 0 0, 100% 0;
-  background-attachment: local, local, scroll, scroll;
-  margin: 0; 
+h2 {
+margin-bottom: 20px;
+color: #4b3f6b;
+text-align: center;
+font-size: 24px;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem; 
-  font-size: 0.875rem;
-  background-color: white;
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
 }
 
-thead {
-  background-color: #f9fafb;
+th,
+td {
+border: 1px solid #ddd;
+padding: 12px 15px;
+text-align: left;
 }
 
 th {
-  text-align: left;
-  padding: 0.625rem 0.75rem; 
-  color: #4b5563;
-  font-weight: 600;
-  border-bottom: 2px solid #e5e7eb;
-  white-space: nowrap;
+background-color: #4b3f6b;
+color: white;
+text-transform: uppercase;
+letter-spacing: 0.1em;
 }
 
-td {
-  padding: 0.625rem 0.75rem; 
-  color: #1f2937;
-  border-bottom: 1px solid #e5e7eb;
+.table-responsive {
+width: 100%;
+overflow-x: auto;
 }
 
-
-.status-badge {
-  padding: 0.25rem 0.5rem; 
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-  text-align: center;
-  white-space: nowrap;
+tr:nth-child(even) {
+background-color: #f2f2f2;
 }
 
-
-.selesai {
-  background-color: #d1fae5;
-  color: #065f46;
+tr:hover {
+background-color: #ddd;
 }
 
-.diproses {
-  background-color: #fef3c7;
-  color: #92400e;
+.status {
+text-transform: capitalize;
+font-weight: bold;
+color: #fff;
+padding: 5px 10px;
+border-radius: 4px;
+text-align: center;
 }
 
-.menunggu {
-  background-color: #e0f2fe;
-  color: #0369a1;
+.status.diproses {
+background-color: #f0ad4e;
 }
 
-.dibatalkan {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-@media (max-width: 768px) {
-  .history-list {
-    padding: 0.75rem;
-  }
-  
-  .header {
-    padding: 0 0.25rem;
-  }
-  
-  th, td {
-    padding: 0.5rem;
-  }
-  
-  .status-badge {
-    padding: 0.25rem 0.5rem;
-  }
+.status.selesai {
+background-color: #5cb85c;
 }
 </style>

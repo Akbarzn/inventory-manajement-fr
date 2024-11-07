@@ -73,112 +73,155 @@ export default {
 };
 </script>
 
+<style scoped>
 
-<style lang="scss" scoped>
 .transaction-list {
-  max-width: 800px;
-  margin: 20px auto;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #007acc;
-    color: #ffffff;
-    padding: 15px;
-    font-weight: bold;
+padding: 24px;
 
-    h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
+background-color: #fff;
 
-    .add-btn {
-      background-color: #005b99;
-      color: #ffffff;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
+border-radius: 8px;
 
-      &:hover {
-        background-color: #004080;
-      }
-    }
-  }
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  .table-responsive {
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-      background-color: #e0e0e0;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: left;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    th {
-      color: #333;
-      font-weight: bold;
-    }
-
-    td {
-      color: #666;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-
-      button {
-        padding: 5px 10px;
-        font-size: 0.85rem;
-        cursor: pointer;
-        border-radius: 4px;
-        border: none;
-        transition: background-color 0.3s;
-
-        &:nth-child(1) {
-          background-color: #007acc;
-          color: #fff;
-
-          &:hover {
-            background-color: #005b99;
-          }
-        }
-
-        &:nth-child(2) {
-          background-color: #cc0000;
-          color: #fff;
-
-          &:hover {
-            background-color: #990000;
-          }
-        }
-      }
-    }
-
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-  }
+margin: 20px 0;
 
 }
+
+.header {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+margin-bottom: 12px;
+
+}
+
+h2 {
+
+color: #4b3f6b;
+
+font-size: 24px;
+
+}
+
+.table-responsive {
+
+width: 100%;
+
+overflow-x: auto;
+
+}
+
+table {
+
+width: 100%;
+
+border-collapse: collapse;
+
+}
+
+th, td {
+
+border: 1px solid #ddd;
+
+padding: 12px 15px;
+
+text-align: center;
+
+vertical-align: middle;
+
+}
+
+th {
+
+background-color: #4b3f6b;
+
+color: white;
+
+text-transform: uppercase;
+
+letter-spacing: 0.1em;
+
+}
+
+tr:nth-child(even) {
+
+background-color: #f2f2f2;
+
+}
+
+tr:hover {
+
+background-color: #ddd;
+
+}
+
+button {
+
+padding: 6px 12px;
+
+border: none;
+
+cursor: pointer;
+
+border-radius: 4px;
+
+font-size: 14px;
+
+}
+
+.verif-btn {
+
+background-color: #4CAF50;
+
+color: white;
+
+}
+
+.verif-btn:hover {
+
+background-color: #45a049;
+
+}
+
+.verif-btn[disabled] {
+
+background-color: #ccc;
+
+cursor: not-allowed;
+
+}
+
+
+@media (max-width: 600px) {
+
+th, td {
+
+padding: 8px 10px;
+
+}
+
+.action-buttons {
+
+display: flex;
+
+flex-direction: column;
+
+align-items: stretch;
+
+}
+
+.action-buttons button {
+
+margin: 5px 0;
+
+}
+
+}
+
 </style>

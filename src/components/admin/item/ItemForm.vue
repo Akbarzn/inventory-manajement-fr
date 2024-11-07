@@ -1,161 +1,127 @@
 <template>
-    <div>
-        <form @submit.prevent="submitForm">submitForm
-        <table>
-        <tr>
-            <td>Kode Barang</td>
-            <td>
-            <input type="text" 
-            v-model="form.kode"
-            id="kode"
-            :disabled="isEdit"
-            required
-            >
-            </td>
-        </tr>
-        <tr>
-            <td>Nama Barang</td>
-            <td>
-            <input type="text" 
-            v-model="form.nama"
-            id="nama"
-            required
-            >
-            </td>
-        </tr>
-        <tr>
-            <td>Deskripsi</td>
-            <td>
-            <input type="text" 
-            v-model="form.deskripsi"
-            id="deskripsi"
-            required
-            >
-            </td>
-        </tr>
-        <tr>
-            <td>Stock</td>
-            <td>
-            <input type="number" 
-            v-model="form.stock"
-            id="stock"
-            required
-            >
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-            <button type="submit">
-            {{ isEdit ? 'Simpan Perubahan' : 'Tambah Barang' }}
-            </button>
-            </td>
-        </tr>
-        </table>
+  <div class="">
+    <form @submit.prevent="submitForm" class="mb-3">
+      <h4 class="form-control-plaintext">Submit Form</h4>
+      <div class="mb-3">
+        <label for="kode" class="form-label">Kode Barang</label>
+        <input type="text" v-model="form.kode" id="kode" :disabled="isEdit" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="nama" class="form-label">Nama Barang</label>
+        <input type="text" v-model="form.nama" id="nama" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="deskripsi" class="form-label">Deskripsi</label>
+        <input
+          type="text"
+          v-model="form.deskripsi"
+          id="deskripsi"
+          class="form-control"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <input
+          type="number"
+          v-model="form.stock"
+          id="stock"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-success text-center">
+        {{ isEdit ? "Simpan Perubahan" : "Tambah Barang" }}
+      </button>
     </form>
-    </div>
+  </div>
 </template>
 
 <script>
-
 export default {
-    name:'ItemForm',
-    props:{
-        item:{
-            type:Object,
-            default:()=>({})
-        },
-        isEdit:{
-            type:Boolean,
-            default:false
-        },
+  name: "ItemForm",
+  props: {
+    item: {
+      type: Object,
+      default: () => ({}),
     },
-        data(){
-            return{
-                form:{
-                    kode:'',
-                    nama:'',
-                    deskripsi:'',
-                    stock:''
-                }
-            }
-        },
-        watch:{
-            item:{
-                immediate:true,
-                handler(newItem){
-                    if(this.isEdit){
-                        this.form = {...newItem}
-                    }else{
-                        this.form = {
-                            kode:'',
-                            nama:'',
-                            deskripsi:'',
-                            stock:''
-                        }
-                    }
-                }
-            }
-        },    
-    methods: {
-        submitForm(){
-            this.$emit('submit',this.form)
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      form: {
+        kode: "",
+        nama: "",
+        deskripsi: "",
+        stock: "",
+      },
+    };
+  },
+  watch: {
+    item: {
+      immediate: true,
+      handler(newItem) {
+        if (this.isEdit) {
+          this.form = { ...newItem };
+        } else {
+          this.form = {
+            kode: "",
+            nama: "",
+            deskripsi: "",
+            stock: "",
+          };
         }
+      },
     },
-}
+  },
+  methods: {
+    submitForm() {
+      this.$emit("submit", this.form);
+    },
+  },
+};
 </script>
 
 <style scoped>
-div {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+.form{
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.mb-3{
+    margin-bottom: 1rem;
 }
 
-td {
-    padding: 10px;
-    vertical-align: top;
+.form label{
+    font-weight: bold;
+    color: #4b3f6b;
 }
 
-input[type="text"],
-input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+.form-control{
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
 }
 
-input[type="text"]:disabled,
-input[type="number"]:disabled {
-    background-color: #e9ecef;
+.form-control:focus {
+    border: color #4b3f6b;
+    box-shadow: 0 0 0 0.2rem rgba(75,63,107,0.25);
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
+.btn-success{
+    background-color: #4caf50;
+    border-color: #4caf50;
 
-button:hover {
-    background-color: #0056b3;
-}
-
-button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
+    &:hover{
+        background-color: #45a049;
+        border-color: #45a049;
+    }
 }
 </style>

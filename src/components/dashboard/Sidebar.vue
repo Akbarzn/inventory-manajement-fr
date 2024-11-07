@@ -1,68 +1,33 @@
 <template>
-  <aside :class="['sidebar', { 'sidebar-hidden': !isSidebarVisible, 'sidebar-small': isSidebarSmall }]">
-    <!-- Menu untuk Admin -->
-    <div v-if="currentRole === 'admin'" class="menu-list">
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'users' }"
-        @click="$emit('show-component', 'users')"
-      >
-        <i class="fas fa-users"></i>
-        <span>Kelola User</span>
-      </div>
+  <aside :class="['sidebar', {'d-none': !isSidebarVisible }]">
+    <a href="" class="logo">SImbok</a>
+    <ul>
+      <li v-if="currentRole === 'admin'">
+      <a href="#" @click.prevent="showComponent('users')" class="nav-link "  >
+      <i class="bi bi-house-door"></i>
+      Users
+      </a>
+      </li>
+      <li>
+      <a href="#" @click.prevent="showComponent('items')" class="nav-link ">
+      <i class="bi bi-box"></i>
+      Items
+      </a>
+      </li>
+      <li>
+      <a href="#" @click.prevent="showComponent('transactions')" class="nav-link">
+      <i class="bi bi-cash"></i>
+      Transactions
+      </a>
+      </li>
 
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'items' }"
-        @click="$emit('show-component', 'items')"
-      >
-        <i class="fas fa-box"></i>
-        <span>Kelola Barang</span>
-      </div>
-
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'transactions' }"
-        @click="$emit('show-component', 'transactions')"
-      >
-        <i class="fas fa-exchange-alt"></i>
-        <span>Transaksi</span>
-      </div>
-    </div>
-
-    <!-- Menu untuk User -->
-    <div v-else class="menu-list">
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'items' }"
-        @click="$emit('show-component', 'items')"
-      >
-        <i class="fas fa-box"></i>
-        <span>Daftar Barang</span>
-      </div>
-
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'transactions' }"
-        @click="$emit('show-component', 'transactions')"
-      >
-        <i class="fas fa-exchange-alt"></i>
-        <span>Transaksi</span>
-      </div>
-
-      <div 
-        class="menu-item"
-        :class="{ active: currentComponent === 'history' }"
-        @click="$emit('show-component', 'history')"
-      >
-        <i class="fas fa-history"></i>
-        <span>Riwayat</span>
-      </div>
-    </div>
-
-    <div class="sidebar-toggle" @click="toggleSidebarSize">
-      <i :class="isSidebarSmall ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
-    </div>
+      <li v-if="currentRole === 'user'">
+      <a href="#" @click.prevent="showComponent('history')" class="nav-link">
+      <i class="bi bi-clock-history"></i>
+      history
+      </a>
+      </li>
+    </ul>
   </aside>
 </template>
 
@@ -78,101 +43,71 @@ export default {
       type: Boolean,
       required: true
     },
-    currentComponent: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isSidebarSmall: false 
-    };
   },
   methods: {
-    toggleSidebarSize() {
-      this.isSidebarSmall = !this.isSidebarSmall;
+    showComponent(component) {
+      this.$emit('showComponent',component)
     }
   },
-  emits: ['show-component']
+  emits: ['showComponent']
 }
 </script>
 
 <style scoped>
 .sidebar {
-  position: fixed;
-  top: 70px; 
-  left: 0;
-  bottom: 0;
-  width: 250px;
-  background-color: #fff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, width 0.3s ease;
-  z-index: 100;
-  overflow: hidden; /* Prevent overflow when resizing */
+width: 200px;
+background: #2a93d9;
+color: white;
+padding: 14px;
+height: 100vh;
+display: flex;
+flex-direction: column;
+position: fixed;
+top: 0;
+left: 0;
+z-index: 999;
+font-size: 18px;
+font-family: sans-serif;
+transition: transform 0.3s ease;
 }
 
-.sidebar-hidden {
-  transform: translateX(-100%);
+.sidebar.hidden {
+transform: translateX(-100%);
 }
 
-.sidebar-small {
-  width: 80px; 
+.logo {
+  color: white;
+font-size: 24px;
+margin-bottom: 30px;
+font-weight: bold;
+text-align: center;
 }
 
-.menu-list {
-  padding: 1rem 0;
+ul {
+list-style: none;
+padding: 0;
+margin: 0;
 }
 
-.menu-item {
+li {
+margin-bottom: 20px;
+text-align: center;
+}
+
+.nav-link{
+  color:white;
+  text-decoration: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem; 
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  white-space: nowrap; /* Prevent text from wrapping */
-}
+  justify-content: center;
+  padding: 10px 0;
+  transition: background color 0.3s ease;
 
-.menu-item:hover {
-  background-color: #f0f0f0; /* Slightly lighter hover color */
-  color: #4f46e5;
-}
-
-.menu-item.active {
-  background-color: #4f46e5;
-  color: #fff;
-}
-
-.menu-item i {
-  width: 24px; /* Increased width for better alignment */
-  margin-right: 10px;
-}
-
-.sidebar-toggle {
-  position: absolute;
-  bottom: 20px;
-  left: 10px;
-  cursor: pointer;
-  color: #4f46e5; /* Icon color */
-  font-size: 1.5rem; /* Larger icon */
-  transition: color 0.2s ease; /* Smooth color transition */
-}
-
-.sidebar-toggle:hover {
-  color: #333; /* Darker color on hover */
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 200px; /* Adjusted width for smaller screens */
-  }
-
-  .menu-item {
-    padding: 0.75rem; /* Less padding on smaller screens */
-  }
-
-  .sidebar-small {
-    width: 60px; /* Smaller width on mobile when collapsed */
+  &:hover{
+    background-color:rgba(225, 225, 225, 0.1);
+    text-decoration: underline;
   }
 }
+
 </style>
