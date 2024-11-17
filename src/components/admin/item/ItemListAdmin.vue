@@ -5,109 +5,149 @@
       <button class="btn btn-primary" @click="showAddForm">Tambah Item</button>
     </div>
     <div class="item-cards row gap-3">
-    <ItemCard 
-    v-for="item in items"
-    :key="item.kode"
-    :item="item"
-    @editItem="editItem"
-    @delete-item="deleteItem" 
-    class="col-md-6 col-lg-3"
-    />
+      <ItemCard
+        v-for="item in items"
+        :key="item.kode"
+        :item="item"
+        @editItem="editItem"
+        @delete-item="deleteItem"
+        class="col-md-6 col-lg-3"
+      />
     </div>
     <Modal :visible="showForm" @close="cancelEditForm">
-    <ItemForm 
-    :item="selectedItem"
-    :isEdit="isEdit"
-    @submit="handleSubmit" @cancel="cancelEditForm"
-    />
+      <ItemForm
+        :item="selectedItem"
+        :isEdit="isEdit"
+        @submit="handleSubmit"
+        @cancel="cancelEditForm"
+      />
     </Modal>
   </div>
 </template>
 
 <script>
-import ItemCard from './ItemCard.vue';
-import Modal from '../../Modal.vue';
-import ItemForm from './ItemForm.vue';
+import { useItemStore } from "@/store/itemStore";
+import ItemCard from "@/components/admin/item/ItemCard.vue";
+import Modal from "@/components/Modal.vue";
+import ItemForm from "@/components/admin/item/ItemForm.vue";
+import { EventBus } from "@/utils/EventBus";
 
 export default {
-  components:{
+  components: {
     ItemCard,
     Modal,
-    ItemForm
+    ItemForm,
   },
-    data(){
-        return{
-            items:[
-                {
-                    kode: 'BRG001',
-                    nama: 'Barang 1',
-                    deskripsi: 'Deskripsi Barang 1',
-                    stock: 10
-                },
-                {
-                    kode:'BRG002',
-                    nama: 'Barang 2',
-                    deskripsi: 'Deskripsi Barang 2',
-                    stock: 20
-                }
-            ],
-            showForm:false,
-            selectedItem:null,
-            isEdit:false    
-        }
+
+  data() {
+    return {
+      showForm: false,
+      selectedItem: null,
+      isEdit: false,
+      searchQuery: "",
+    };
+  },
+
+  computed: {
+    items() {
+      return this.itemStore.items; // Mengakses state 'items' dari store Pinia
     },
-    methods:{
-      showAddForm(){
-        this.selectedItem = {kode:'',nama:'',deskripsi:'',stock:''}
-        this.isEdit = false
-        this.showForm = true
-      },
-      editItem(item){
-        this.selectedItem = {...item}
-        this.isEdit = true
-        this.showForm = true
-      },
-      handleSubmit(item){
+
+    filteredItems() {
+      return this.items.filter((item) => {
+        return (
+          item.kode.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          item.nama.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      });
+    },
+  },
+
+  methods: {
+    showAddForm() {
+      this.selectedItem = { kode: "", nama: "", deskripsi: "", stok: "" };
+      this.isEdit = false;
+      this.showForm = true;
+    },
+
+    editItem(item) {
+      this.selectedItem = { ...item };
+      this.isEdit = true;
+      this.showForm = true;
+    },
+
+    handleSubmit(item) {
+      if(this.validatedItem(item)){
         if(this.isEdit){
-          const index = this.items.findIndex((i)=> i.kode === item.kode)
-          this.items[index] = item
-        }else{
-          this.items.push(item)
+          console.log('Aksi addItem dipanggils');
+          this.itemStore.updateItem(item)
         }
-        this.showForm = false 
-      },
-      cancelEditForm(){
+        else{
+          console.log('Aksi addItem dipanggil');
+          this.itemStore.addItem(item)
+        }
         this.showForm = false
-        this.selectedItem = null
-        this.isEdit = false
-      },
-      deleteItem(kode){
-            this.items = this.items.filter(item => item.kode !== kode);
-            this.$emit('delete-item',kode)
-        }
-    }
+      }
+    },
+    
+    validatedItem(item){
+      return(
+        item.kode &&
+        item.nama &&
+        item.deskripsi &&
+        item.stock !== null &&
+        !isNaN(item.stock)
+      )
+    },
+
+    cancelEditForm() {
+      this.showForm = false;
+    },
+
+    deleteItem(kode) {
+      this.itemStore.deleteItem(kode); // Memanggil action 'deleteItem' dari store
+    },
+
+    handleSearch(query) {
+      this.searchQuery = query;
+    },
+  },
+
+  mounted() {
+    EventBus.on("search", this.handleSearch);
+  },
+
+  beforeUnmount() {
+    EventBus.off("search", this.handleSearch);
+  },
+
+  setup() {
+    const itemStore = useItemStore();
+
+    return { itemStore };
+  },
 };
 </script>
 
 <style scoped>
-.item-list{
+.item-list {
   background-color: white;
   border-radius: 8px;
   margin: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.header h2{
+.header h2 {
   color: #4b3f6b;
   font-size: 24px;
 }
 
-.btn-primary{
+.btn-primary {
   background-color: #4b3f6b;
   color: white;
   border: none;
 
-  &:hover{
+  &:hover {
     background-color: #2276cb;
   }
 }
