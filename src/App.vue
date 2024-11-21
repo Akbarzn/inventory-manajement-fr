@@ -5,9 +5,11 @@
       :is-sidebar-visible="isSidebarVisible"
       @update-role="updateRole"
       @toggle-sidebar="toggleSidebar"
+      v-if="showHeader"
     />
-    <div class="app-content">
+    <div class="app-content" :class="{ noHeader: !showHeader }">
       <Sidebar
+        v-if="showSidebar"
         :current-role="currentRole"
         :is-sidebar-visible="isSidebarVisible"
         @show-component="navigateTo"
@@ -15,9 +17,12 @@
 
       <main
         class="main-content"
-        :class="{ 'content-expanded': !isSidebarVisible }"
+        :class="{ 'content-expanded': !isSidebarVisible && showSidebar }"
       >
-      <router-view :key="$route.fullPath" :currentComponent="$route.params.component" />
+        <router-view
+          :key="$route.fullPath"
+          :currentComponent="$route.params.component"
+        />
       </main>
     </div>
 
@@ -38,22 +43,27 @@ export default {
     Sidebar,
     // AdminView,
     // UserView,
-    
   },
   data() {
-    return{
-      currentRole:this.$route.name || 'admin',
-      isSidebarVisible:true,
-      searchTerm:'',
-    }
+    return {
+      currentRole: this.$route.name || "admin",
+      isSidebarVisible: true,
+      searchTerm: "",
+    };
   },
-  watch:{
-    '$route.name'(newRole){
-      this.currentRole = newRole
-    }
+  watch: {
+    "$route.name"(newRole) {
+      this.currentRole = newRole;
+    },
   },
   computed: {
-    currentView(){
+    showHeader() {
+      return !this.$route.meta.hideHeader;
+    },
+    showSidebar() {
+      return !this.$route.meta.hideSidebar;
+    },
+    currentView() {
       return this.currentRole === "admin" ? AdminView : UserView;
     },
   },
@@ -63,7 +73,7 @@ export default {
       this.navigateTo("items");
     },
     navigateTo(component) {
-      this.$router.push({name:this.currentRole,params:{ component }})
+      this.$router.push({ name: this.currentRole, params: { component } });
     },
     toggleSidebar() {
       this.isSidebarVisible = !this.isSidebarVisible;
@@ -87,23 +97,68 @@ export default {
 </script>
 
 <style scoped>
-.app-content {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  display: flex;
-  font: 1em sans-serif;
-  height: 100vh;
-  margin-top: 60px;
+html,
+body {
+  height: 100%;
+
+  margin: 0;
+
+  background-color: #4b3f6b;
 }
+
+#app {
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  background-color: #4b3f6b;
+}
+
+.app-content {
+  display: flex;
+
+  flex-grow: 1;
+
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+
+  font: 1em sans-serif;
+
+  height: calc(100vh - 60px);
+
+  margin-top: 60px;
+
+  background-color: #4b3f6b;
+}
+
 .main-content {
   flex-grow: 1;
+
   transition: margin-left 0.3s ease;
 }
+
 .main-content.expanded {
   margin-left: 200px;
 }
+
+.app-content.noHeader {
+  margin-top: 0;
+
+  height: 100vh;
+}
+
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
+
+    margin-top: 180px;
+  }
+
+  .app-content.noHeader {
+    margin-top: 0;
+
+    height: calc(100vh - 60px);
   }
 }
 </style>

@@ -1,67 +1,91 @@
 // import HomeView from '../views/HomeView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import AdminView from '../views/AdminView.vue'
-import UserView from '../views/UserView.vue'
-import LoginViews from '@/views/LoginViews.vue'
-
+import { createRouter, createWebHistory } from "vue-router";
+import AdminView from "../views/AdminView.vue";
+import UserView from "../views/UserView.vue";
+import HomeView from "@/components/auth/HomeView.vue";
+import LoginView from "@/components/auth/LoginView.vue";
+import RegisterView from "@/components/auth/RegisterView.vue";
+import { useAuthStore } from "@/store/authStore";
 const routes = [
   {
-    path: '/admin/:component',
-    name: 'admin',
+    path: "/",
+
+    name: "home",
+
+    component: HomeView,
+
+    meta: { hideHeader: true, hideSidebar: true },
+
+    children: [
+      {
+        path: "login",
+
+        name: "login",
+
+        component: LoginView,
+      },
+
+      {
+        path: "register",
+
+        name: "register",
+
+        component: RegisterView,
+      },
+    ],
+  },
+
+  {
+    path: "/admin/:component?",
+
+    name: "admin",
+
     component: AdminView,
-    props:true,
-    meta:{
-      requiresAuth:true,
-      role:'admin'
-    }
+
+    props: true,
+
+    meta: { requiresAuth: true, role: "ADMIN" },
   },
+
   {
-    path: '/user/:component',
-    name: 'user',
-    component:UserView,
-    props:true,
-    meta:{
-      requiresAuth:true,
-      role:'user'
-    }
+    path: "/user/:component?",
+
+    name: "user",
+
+    component: UserView,
+
+    props: true,
+
+    meta: { requiresAuth: true, role: "USER" },
   },
-  {
-    path:'/login',
-    name:'login',
-    component:LoginViews
-  },
-  {
-    path:'/',
-    redirect:{'name':'admin',params:{component:'items'}},
-  }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
 
-router.beforeEach((to,from,next)=>{
-const isAuthenticated = Boolean(localStorage.getItem('auth'))
-const userRole = localStorage.getItem('role')
+  routes,
+});
 
-if(to.meta.requiresAuth && !isAuthenticated){
-  alert('Ypu need to login to access this page')
-  next({name:'login'})
-}else if(to.meta.requiresAuth && isAuthenticated && to.meta.role !== userRole){
-  alert('You do not have permission to access this page.')
-  next(false)
-}else{
-  next()
-}
-})
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
 
-export default router
+  const isAuthenticated = !!authStore.token;
+
+  const userRole = authStore.role;
+
+  if (to.meta.requiresAuth) {
+    if (isAuthenticated) {
+      if (userRole === to.meta.role || to.meta.role === undefined) {
+        next();
+      } else {
+        next({ name: "home" });
+      }
+    } else {
+      next({ name: "home" });
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
