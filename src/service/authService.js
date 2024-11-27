@@ -1,4 +1,3 @@
-// import apiClient from '@/components/plugins/axios'
 import apiClient from '@/plugins/axios';
 import { useAuthStore } from '@/store/authStore'
 
@@ -10,7 +9,7 @@ export const login = async (username,password) =>{
         });
         console.log('Login response:', response.data)
 
-        if(!response.data || response.data.data || !response.data.data.token){
+        if(!response.data || !response.data.data || !response.data.data.token){
             throw new Error('Invalid response from serve')
         }
         
@@ -28,8 +27,20 @@ export const login = async (username,password) =>{
     )
     return response.data.data
 }catch(error){
-    console.error('Error during login', error)
-    throw new Error(error.response?.data?.message || error.message)
+    if(error.response){
+        switch(error.response.status){
+            case 400:
+                throw new Error((error.response.data.message || 'Username or password is incorrect'));
+            case 410:
+                throw new Error((error.response.data.message || 'Invalid credentials'));
+                default:
+                    throw new Error(error.response.data.message || 'An error occurred');
+        }
+    }else{
+        console.error('Error during login', error)
+        // throw new Error(error.response?.data?.message || error.message)
+        throw new Error(error.message || 'Error login')
+    }
 }
 
 }
@@ -43,6 +54,14 @@ export const register = async(username,email,password) => {
         })
         return response.data
     }catch(error){
-        throw new Error(error.response?.data?.message || error.message)
+        if(error.response){
+            switch(error.response.status){
+                case 400:
+                    throw new Error((error.response.data.message || 'User already exists'))  
+            }
+        }else{
+            console.log('Error during registration:', error)
+            throw new Error(error.message || 'Error register')
+        }
     }
 }

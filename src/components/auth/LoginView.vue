@@ -25,6 +25,7 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Login</button>
     </form>
+    <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
     <div class="mt-3 text-center">
     <p class="text-muted">Dont Have an account? <a href="#" @click.prevent="$emit('switch','RegisterView')" class="text-custom">Register Here</a></p>
     </div>

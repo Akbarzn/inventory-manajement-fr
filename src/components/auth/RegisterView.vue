@@ -18,13 +18,7 @@
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
 
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          class="form-control"
-          required
-        />
+        <input type="email" id="email" v-model="email" class="form-control" required />
       </div>
 
       <div class="mb-3">
@@ -40,9 +34,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="confirm-password" class="form-label"
-          >Confirm Password</label
-        >
+        <label for="confirm-password" class="form-label">Confirm Password</label>
 
         <input
           type="password"
@@ -62,11 +54,7 @@
       <p class="text-muted">
         Already have an account?
 
-        <a
-          href="#"
-          @click.prevent="$emit('switch', 'Login')"
-          class="text-custom"
-        >
+        <a href="#" @click.prevent="$emit('switch', 'Login')" class="text-custom">
           Login here
         </a>
       </p>
@@ -75,7 +63,7 @@
 </template>
 
 <script>
-import {register as registerService} from "@/service/authService"
+import { register as registerService } from "@/service/authService";
 export default {
   data() {
     return {
@@ -86,26 +74,23 @@ export default {
       error: "",
     };
   },
-  methods:{
-    async register(){
-        if(this.password !== this.confirmPassword){
-            alert('Passwords do not match!')
-            return;
-        }
-        try{
-            const response = await registerService(
-                this.username,
-                this.email,
-                this.password
-            )
-            console.log('Registration successful:',response)
-            alert('Registration successful!')
-            this.$emit('switch','Login')
-        }catch(error){
-            console.error('Registration failed:',error.message)
-        }
-    }
-  }
+  methods: {
+    async register() {
+      if (this.password !== this.confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      try {
+        const response = await registerService(this.username, this.email, this.password);
+        console.log("Registration successful:", response);
+        alert("Registration successful!");
+        this.$emit("switch", "LoginView");
+      } catch (error) {
+        this.error = error.message
+        console.error("Registration failed:", error.message);
+      }
+    },
+  },
 };
 </script>
 

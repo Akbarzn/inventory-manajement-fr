@@ -17,11 +17,14 @@
 
       <main
         class="main-content"
-        :class="{ 'content-expanded': !isSidebarVisible && showSidebar }"
+        :class="{ 'content-expanded': !isSidebarVisible && showSidebar , 'fullwidth' : !isSidebarVisible }"
       >
+
+  <!-- <div :class="['main-content', { 'full-width': !isSidebarVisible }]"> -->
         <router-view
           :key="$route.fullPath"
           :currentComponent="$route.params.component"
+          :isSidebarVisible="isSidebarVisible"
         />
       </main>
     </div>
@@ -96,69 +99,61 @@ export default {
 };
 </script>
 
+
 <style scoped>
 html,
 body {
   height: 100%;
-
   margin: 0;
+}
 
-  background-color: #4b3f6b;
+header{
+  padding: 10px 20px;
+  width: calc(100% - 170px);
+  left: 170px;
+  z-index: 999;
+  top: 0;
 }
 
 #app {
   height: 100%;
-
   display: flex;
-
   flex-direction: column;
-
-  background-color: #4b3f6b;
 }
 
 .app-content {
   display: flex;
-
   flex-grow: 1;
-
   font-family: Avenir, Helvetica, Arial, sans-serif;
-
-  font: 1em sans-serif;
-
   height: calc(100vh - 60px);
-
-  margin-top: 60px;
-
-  background-color: #4b3f6b;
 }
 
 .main-content {
   flex-grow: 1;
-
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
+  width: calc(100% - 200px);
 }
 
-.main-content.expanded {
-  margin-left: 200px;
+.main-content.content-expanded {
+  /* width: calc(100% - 200px);  */
+  margin-left: 0;
+  width: 100%;
 }
 
 .app-content.noHeader {
   margin-top: 0;
-
   height: 100vh;
 }
 
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
-
-    margin-top: 180px;
+    margin-top: 0;
+    width: 100%;
   }
 
   .app-content.noHeader {
-    margin-top: 0;
-
-    height: calc(100vh - 60px);
+    height: 100vh;
   }
 }
 </style>

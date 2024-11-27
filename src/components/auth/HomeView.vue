@@ -1,7 +1,6 @@
 <template>
   <div
-    class="home-view d-flex flex-column align-items-center justify-content-center min-vh-100 bg-custom text-white"
-  >
+    class="home-view d-flex flex-column align-items-center justify-content-center min-vh-100 bg-custom text-white">
     <div class="text-center mb-4 welcome-text">
       <h1 class="display-4 fw-bold mb-3">Welcome to Simbok</h1>
       <p class="lead mb-4">
@@ -43,13 +42,9 @@ export default {
 <style scoped>
 .home-view {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-
-  background-color: #4b3f6b;
-
+  background-color: #0d89f6;
   min-height: 100vh;
-
   overflow: auto;
-
   padding: 20px;
 }
 
@@ -65,9 +60,7 @@ export default {
 
 .auth-container {
   width: 100%;
-
   max-width: 400px;
-
   margin-top: 20px;
 }
 
@@ -82,7 +75,6 @@ export default {
 
   .auth-container {
     padding: 15px;
-
     margin-top: 10px;
   }
 

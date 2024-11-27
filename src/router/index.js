@@ -9,17 +9,12 @@ import { useAuthStore } from "@/store/authStore";
 const routes = [
   {
     path: "/",
-
     name: "home",
-
     component: HomeView,
-
     meta: { hideHeader: true, hideSidebar: true },
-
     children: [
       {
         path: "login",
-
         name: "login",
 
         component: LoginView,
@@ -27,9 +22,7 @@ const routes = [
 
       {
         path: "register",
-
         name: "register",
-
         component: RegisterView,
       },
     ],
@@ -37,42 +30,30 @@ const routes = [
 
   {
     path: "/admin/:component?",
-
     name: "admin",
-
     component: AdminView,
-
     props: true,
-
     meta: { requiresAuth: true, role: "ADMIN" },
   },
 
   {
     path: "/user/:component?",
-
     name: "user",
-
     component: UserView,
-
     props: true,
-
     meta: { requiresAuth: true, role: "USER" },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-
   routes,
 });
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-
   const isAuthenticated = !!authStore.token;
-
   const userRole = authStore.role;
-
   if (to.meta.requiresAuth) {
     if (isAuthenticated) {
       if (userRole === to.meta.role || to.meta.role === undefined) {

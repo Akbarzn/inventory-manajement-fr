@@ -145,11 +145,13 @@ transition: background-color 0.3s ease;
 }
 
 button:hover {
-background-color: #6b5bb8;
+background-color: #196fe0;
+color: fff;
 }
 
 button.active {
 background-color: #2b93d9;
+color: white;
 }
 .logout-btn {
 margin-left: 10px;
@@ -161,7 +163,8 @@ transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-background-color: #6b5bb8;
+background-color: #196fe0;
+color: fff;
 }
 
 @media (max-width: 768px) {

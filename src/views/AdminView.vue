@@ -34,11 +34,11 @@
     </div>
    -->
 
-   <div class="scrollable-content">
-    <UserList v-if="currentComponent === 'users'" />
+   <div class="scrollable-content " :class="{ fullwidth: !isSidebarVisible }" > 
+    <UserList v-if="currentComponent === 'users'"
+     />
    <ItemList v-if="currentComponent === 'items'" 
-   @edit-item="showEditForm"
-   @add-item="showAddForm"
+   
     />
     <TransactionList v-if="currentComponent === 'transactions'" />
    </div>
@@ -50,19 +50,19 @@
 
 <script>
 import ItemList from '@/components/admin/item/ItemListAdmin.vue'
-import ItemForm from '@/components/admin/item/ItemForm.vue'
+// import ItemForm from '@/components/admin/item/ItemForm.vue'
 import TransactionList from '@/components/admin/transaction/TransactionList.vue'
 import UserList from '@/components/admin/user/UserList.vue'  
-import Modal from '@/components/Modal.vue'
+// import Modal from '@/components/Modal.vue'
 
 export default {
   name: 'AdminView',
   components: {
     ItemList,
-    ItemForm,
+    // ItemForm,
     TransactionList,
     UserList  ,
-    Modal
+    // Modal
   },
   data() {
     return {
@@ -76,10 +76,19 @@ export default {
       type: String,
       required: true
     },
+    isSidebarVisible:{
+      type:Boolean,
+      required:true
+    }
   },
   methods: {
     showEditForm(item) {
       this.selectedItem = item
+      this.isEdit = true
+      this.showForm = true
+    },
+    showEditUserForm(user) {
+      this.selectedItem = user
       this.isEdit = true
       this.showForm = true
     },
@@ -104,8 +113,25 @@ export default {
 </script>
 
 <style scoped>
-.scrollable-content{
-  /* width: calc(100% - 200px); */
-  margin-left: 200px;
-}
+
+.admin-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .scrollable-content {
+    flex: 1;
+    margin-top: 50px;
+    overflow-y: auto;
+    margin-left: 200px;
+    padding: 20px;
+    background-color: #ffffff;
+    max-height: calc(100vh - 60px);
+  }
+  
+  .scrollable-content.fullwidth{
+    margin-left: 0;
+  }
 </style>
